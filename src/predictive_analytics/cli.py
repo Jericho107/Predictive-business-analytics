@@ -12,22 +12,19 @@ def smoke() -> int:
 
 
 def reverse_test() -> int:
-    cases: list[dict[str, str]] = []
-
+    cases = []
     try:
-        validate_features(["price", "future_revenue"])
+        validate_features(['price','future_revenue'])
     except ValueError as exc:
         cases.append({"case": "target-leakage", "status": "PASS", "error": str(exc)})
     else:
         cases.append({"case": "target-leakage", "status": "FAIL", "error": "corruption accepted"})
-
     try:
-        acceptance_gate([ForecastPoint("X", 10, -1, 9)])
+        acceptance_gate([ForecastPoint('X',10,-1,9)])
     except ValueError as exc:
         cases.append({"case": "negative-forecast", "status": "PASS", "error": str(exc)})
     else:
         cases.append({"case": "negative-forecast", "status": "FAIL", "error": "corruption accepted"})
-
     print(json.dumps(cases, indent=2, sort_keys=True))
     return 0 if all(case["status"] == "PASS" for case in cases) else 1
 
@@ -38,7 +35,7 @@ def main() -> int:
         return smoke()
     if command == "reverse-test":
         return reverse_test()
-    print("usage: python -m predictive_analytics.cli [smoke|reverse-test]", file=sys.stderr)
+    print("usage: python -m PACKAGE.cli [smoke|reverse-test]", file=sys.stderr)
     return 2
 
 
