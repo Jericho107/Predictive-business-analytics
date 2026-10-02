@@ -41,6 +41,11 @@ def acceptance_gate(
     minimum_improvement_pct: float = 5.0,
     max_segment_regression_pct: float = 5.0,
 ) -> ModelGate:
+    if minimum_improvement_pct < 0:
+        raise ValueError("minimum improvement must be non-negative")
+    if max_segment_regression_pct < 0:
+        raise ValueError("maximum segment regression must be non-negative")
+
     points = list(rows)
     if not points:
         raise ValueError("evaluation set cannot be empty")
@@ -69,15 +74,14 @@ def acceptance_gate(
             [point.actual for point in scoped],
             [point.candidate for point in scoped],
         )
-        regression = (
-            (candidate_segment_mae - baseline_segment_mae)
-            / baseline_segment_mae
-            * 100
-            if baseline_segment_mae
-            else 0.0
-            if candidate_segment_mae == 0
-            else 100.0
-        )
+        if baseline_segment_mae > 0:
+            regression = (
+                (candidate_segment_mae - baseline_segment_mae)
+                / baseline_segment_mae
+                * 100
+            )
+        else:
+            regression = 0.0 if candidate_segment_mae == 0 else 100.0
         segment_regressions.append(regression)
 
     worst_regression = max(segment_regressions, default=0.0)
