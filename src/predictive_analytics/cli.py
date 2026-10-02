@@ -35,7 +35,7 @@ def main() -> int:
         return smoke()
     if command == "reverse-test":
         return reverse_test()
-    print("usage: python -m PACKAGE.cli [smoke|reverse-test]", file=sys.stderr)
+    print("usage: python -m predictive_analytics.cli [smoke|reverse-test]", file=sys.stderr)
     return 2
 
 
