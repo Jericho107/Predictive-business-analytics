@@ -37,7 +37,10 @@ def model_report_html() -> str:
 <h2>Model coefficients</h2>
 <table><thead><tr><th>Feature</th><th>Standardised coefficient</th></tr></thead><tbody>{coefficients}</tbody></table>
 <h2>Multi-seed robustness</h2>
-<table><thead><tr><th>Seed</th><th>Validation improvement</th><th>Final-test improvement</th><th>Accepted</th></tr></thead><tbody>{seed_rows}</tbody></table>
+<table><thead><tr>
+<th>Seed</th><th>Validation improvement</th>
+<th>Final-test improvement</th><th>Accepted</th>
+</tr></thead><tbody>{seed_rows}</tbody></table>
 <p><small>Synthetic forecasting benchmark. Results are not production accuracy claims.</small></p>
 </body></html>"""
 
