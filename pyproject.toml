@@ -4,10 +4,10 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "predictive-business-analytics"
-version = "1.1.0"
-description = "Baseline-first predictive analytics with leakage controls and explicit model acceptance gates."
+version = "2.0.0"
+description = "Baseline-first predictive analytics with chronological evaluation, leakage controls and model acceptance gates."
 requires-python = ">=3.12"
-dependencies = []
+dependencies = ["scikit-learn>=1.5,<2"]
 
 [project.optional-dependencies]
 dev = ["pytest>=8,<9", "ruff>=0.9,<1"]

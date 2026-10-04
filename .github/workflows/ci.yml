@@ -13,7 +13,7 @@ permissions:
 jobs:
   quality-gate:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 12
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -32,5 +32,9 @@ jobs:
         run: pytest -q
       - name: Smoke evidence
         run: python -m predictive_analytics.cli smoke
+      - name: Generate model decision surface
+        run: |
+          python -m predictive_analytics.cli report
+          test -s output/predictive_model_report.html
       - name: Reverse-test evidence
         run: python -m predictive_analytics.cli reverse-test

@@ -2,7 +2,9 @@
 
 # Predictive Business Analytics
 
-### Baseline-first predictive analytics with leakage controls and explicit model acceptance gates.
+### Baseline-First ML · Chronological Validation · Leakage Control · Segment Guardrails
+
+**Python · scikit-learn · Ridge · Forecasting · CI**
 
 **Pretoria BI — Data · Intelligence · Performance**
 
@@ -10,29 +12,61 @@
 
 ---
 
-## Management question
+## Decision question
 
-> **Does a candidate model improve enough over a simple baseline to justify operational use, without hiding segment-level regressions or target leakage?**
+> **Does a trained model beat a simple operational baseline strongly enough, consistently enough and safely enough to justify use on unseen future data?**
 
-**All data and entities are synthetic. No client result or realised ROI is claimed.**
+This repository implements an actual model-development protocol rather than evaluating pre-filled predictions.
 
----
-
-## What this repository proves
-
-- Baseline-first evaluation
-- Leakage blacklist
-- Untouched evaluation contract
-- Overall MAE improvement gate
-- Segment regression guardrail
-
-The objective is not to inflate a portfolio with screenshots. The repository has an executable happy path and deliberately corrupted states that must be rejected.
-
-## Evidence chain
+## Modelling protocol
 
 ```text
-SIGNAL → CONTRACT → VALIDATION → ANALYSIS → DECISION RULE → ACTION OWNER → FOLLOW-UP
+DETERMINISTIC SYNTHETIC BUSINESS SERIES
+                 ↓
+          FEATURE CONTRACT
+                 ↓
+      CHRONOLOGICAL TRAIN SPLIT
+                 ↓
+      LAG-7 OPERATIONAL BASELINE
+                 ↓
+        RIDGE CANDIDATE MODEL
+                 ↓
+      VALIDATION ACCEPTANCE GATE
+                 ↓
+          REFIT TRAIN + VALIDATION
+                 ↓
+         UNTOUCHED FINAL TEST
+                 ↓
+   OVERALL + SEGMENT PERFORMANCE GATE
+                 ↓
+      MULTI-SEED ROBUSTNESS CHECK
 ```
+
+Features include time trend, lag-7 demand, weekly seasonality, price index, promotion state and segment encoding. Target-derived future fields are explicitly blocked.
+
+## Acceptance rules
+
+The candidate must:
+
+- beat the lag-7 baseline by at least 5% MAE on validation;
+- avoid >5% MAE regression on any segment;
+- pass before final-test results are accessed;
+- pass the same performance guardrails on the untouched final test;
+- remain accepted across multiple deterministic seeds.
+
+A deliberately weak zero predictor is rejected in the reverse-test suite.
+
+## Explainability
+
+The final linear model exposes ranked standardised coefficients. They describe model association, not causal effect.
+
+## Model report
+
+```bash
+python -m predictive_analytics.cli report
+```
+
+Produces `output/predictive_model_report.html` with validation, final-test, multi-seed and coefficient evidence.
 
 ## Run locally
 
@@ -41,34 +75,12 @@ python -m pip install -e ".[dev]"
 ruff check .
 pytest -q
 python -m predictive_analytics.cli smoke
+python -m predictive_analytics.cli report
 python -m predictive_analytics.cli reverse-test
 ```
 
-## Repository map
-
-```text
-predictive-business-analytics/
-├── .github/workflows/ci.yml
-├── config/
-├── docs/
-├── sql/
-├── src/predictive_analytics/
-├── tests/
-├── Dockerfile
-├── Makefile
-├── pyproject.toml
-└── README.md
-```
-
-## Proof boundary
-
-Implemented evidence is separated from future production claims. See `docs/proof_matrix.md` and `docs/limitations.md`. Thresholds in this synthetic case are examples to demonstrate governance and must be calibrated before real deployment.
+All results are synthetic benchmarks. Production use would require real data, drift monitoring, retraining policy, operational latency constraints and post-deployment outcome measurement.
 
 ---
 
-<div align="center">
-
-**Pretoria BI**  
-**Understand · Decide · Act · Measure**
-
-</div>
+**Pretoria BI — Understand · Decide · Act · Measure**
