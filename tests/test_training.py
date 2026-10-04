@@ -1,4 +1,9 @@
-from predictive_analytics.training import chronological_split, generate_dataset, multi_seed_validation, training_evidence
+from predictive_analytics.training import (
+    chronological_split,
+    generate_dataset,
+    multi_seed_validation,
+    training_evidence,
+)
 
 
 def test_chronological_split_has_no_time_overlap():
